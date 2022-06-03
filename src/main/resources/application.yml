@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://k8s01/vmwarchsamplers
+    username: vmwarchsample
+    password: vmwarchsample
+
+  flyway:
+    enabled: true
+
+  jackson:
+    serialization:
+      write-enums-using-to-string: true
+      write-dates-as-timestamps: false
+
+  jpa:
+    open-in-view: false
+
+logging:
+  level:
+    root: INFO
