@@ -23,13 +23,15 @@ class RestaurantApplicationServiceSpec extends Specification {
             1 * restaurantRepositoryPort.getAll() >> [restaurantOne, restaurantTwo]
     }
 
-    def "When registering a meal we expect the meal is persistent and new identifier is returned"() {
+    def "When registering a meal we expect the Restaurant aggregate is loaded, meal is added and new Restaurant is persisted."() {
         given:
+            def restaurant = "Washington DC"
             def name = "italian-spaghetti"
         when:
-            def result = subject.registerMeal(name)
+            subject.registerMeal(restaurant, name)
         then:
-            result.get() == name
+            1 * restaurantRepositoryPort.getById("Washington DC") >> new Restaurant("Washington DC")
+            1 * restaurantRepositoryPort.persist(new Restaurant("Washington DC", ["italian-spaghetti"]))
     }
 
     /*

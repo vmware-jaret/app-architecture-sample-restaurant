@@ -1,6 +1,7 @@
 package com.vmw.sample.restaurantservice.secondary;
 
 import com.vmw.sample.restaurantservice.core.Restaurant;
+import com.vmw.sample.restaurantservice.core.RestaurantNotFoundException;
 import com.vmw.sample.restaurantservice.core.RestaurantRepositoryPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,26 @@ public class JpaRestaurantRepositoryAdapter implements RestaurantRepositoryPort 
         return repository.findAll().stream().map(this::convert).collect(Collectors.toList());
     }
 
+    @Override
+    public Restaurant getById(String name) {
+        return repository.findById(name).map(this::convert).orElseThrow(RestaurantNotFoundException::new);
+    }
+
+    @Override
+    public void persist(Restaurant restaurant) {
+        repository.save(convert(restaurant));
+    }
+
     private Restaurant convert(RestaurantEntity entity) {
         return new Restaurant(
                 entity.getId().getName(),
                 entity.getMeals().stream().map((meal) -> meal.getId().getName()).collect(Collectors.toList())
         );
+    }
+
+    private RestaurantEntity convert(Restaurant restaurant) {
+        RestaurantEntity entity = new RestaurantEntity();
+        // TODO: implement
+        return entity;
     }
 }

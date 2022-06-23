@@ -27,7 +27,7 @@ class RestaurantAPISpec extends Specification {
     private MockMvc mvc;
 
     @Autowired
-    private RestaurantApplicationPort restaurantApplicationPort;
+    private RestaurantApplicationPort restaurantApplicationPort
 
     def "Given two restaurants with both a menu, when submitting a HTTP GET for retrieving the menu, we expect the whole menu returned"() {
         given:
@@ -49,13 +49,17 @@ class RestaurantAPISpec extends Specification {
 
     def "Given a POST for registering a meal, we expect that it is stored and new identifier has been returned"() {
         given:
-            def body = readFile("RegisterMealRequest01.json")
+            def body = """{
+                "restaurant": "Washington-DC",
+                "meal": "italian spaghetti"
+            }"""
+            println(body)
         when:
             def results = mvc.perform(post('/api/restaurant/v1/register-meal')
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
         then:
-            1 * restaurantApplicationPort.registerMeal("italian spaghetti") >> CompletableFuture.completedFuture("test-id")
+            1 * restaurantApplicationPort.registerMeal("Washington-DC", "italian spaghetti")
             results.andExpect(status().isOk())
     }
 

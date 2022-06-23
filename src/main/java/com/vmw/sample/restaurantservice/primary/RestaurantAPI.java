@@ -17,9 +17,8 @@ public class RestaurantAPI {
     private final RestaurantApplicationPort restaurantApplicationPort;
 
     @PostMapping("/register-meal")
-    public RegisterMealResponse registerMeal(@RequestBody RegisterMealRequest registerMealRequest) throws Exception {
-        final String id = this.restaurantApplicationPort.registerMeal(registerMealRequest.getName()).get();
-        return new RegisterMealResponse(id);
+    public void registerMeal(@RequestBody RegisterMealRequest body) {
+        this.restaurantApplicationPort.registerMeal(body.getRestaurant(), body.getMeal());
     }
 
     @GetMapping("/retrieve-menu")
@@ -32,14 +31,8 @@ public class RestaurantAPI {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RegisterMealRequest {
-        private String name;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class RegisterMealResponse {
-        private String id;
+        private String restaurant;
+        private String meal;
     }
 
     @Data
