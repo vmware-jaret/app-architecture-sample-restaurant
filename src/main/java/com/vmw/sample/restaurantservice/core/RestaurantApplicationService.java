@@ -14,10 +14,10 @@ public class RestaurantApplicationService implements RestaurantApplicationPort {
     private final RestaurantRepositoryPort restaurantRepositoryPort;
 
     @Override
-    public List<Menu> retrieveMenu() {
+    public List<RestaurantMenu> retrieveMenu() {
         final List<Restaurant> restaurants = this.restaurantRepositoryPort.getAll();
         return restaurants.stream()
-                .map((restaurant -> new Menu(restaurant.getName(), restaurant.getMenu())))
+                .map((restaurant -> new RestaurantMenu(restaurant.getName(), restaurant.getMenu())))
                 .collect(Collectors.toList());
     }
 

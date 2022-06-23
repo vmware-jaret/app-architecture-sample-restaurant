@@ -30,4 +30,22 @@ class RestaurantSpec extends Specification {
         then:
             result == ["italian-spaghetti", "couscous"]
     }
+
+    def "Given a Restaurant without any registered Meals, when the customer requests the Menu it get an empty Menu"() {
+        given:
+            def subject = new Restaurant("Washington DC", [])
+        when:
+            List<String> result = subject.getMenu();
+        then:
+            result == []
+    }
+
+    def "Given a Restaurant without any registered Meals, when the customer requests the Menu it get at least the name of Restaurant"() {
+        given:
+            def subject = new Restaurant("Washington DC", [])
+        when:
+            String result = subject.getName();
+        then:
+            result == "Washington DC"
+    }
 }

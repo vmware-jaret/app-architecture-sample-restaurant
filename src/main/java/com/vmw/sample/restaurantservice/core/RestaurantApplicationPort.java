@@ -15,5 +15,5 @@ public interface RestaurantApplicationPort {
      * Returns the menu of every Restaurant
      * @return
      */
-    List<Menu> retrieveMenu();
+    List<RestaurantMenu> retrieveMenu();
 }

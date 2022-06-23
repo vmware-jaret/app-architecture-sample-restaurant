@@ -1,6 +1,6 @@
 package com.vmw.sample.restaurantservice.primary;
 
-import com.vmw.sample.restaurantservice.core.Menu;
+import com.vmw.sample.restaurantservice.core.RestaurantMenu;
 import com.vmw.sample.restaurantservice.core.RestaurantApplicationPort;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class RestaurantAPI {
 
     @GetMapping("/retrieve-menu")
     public RetrieveMenuResponse retrieveMenu() {
-        final List<Menu> menus = this.restaurantApplicationPort.retrieveMenu();
+        final List<RestaurantMenu> menus = this.restaurantApplicationPort.retrieveMenu();
         return new RetrieveMenuResponse(menus);
     }
 
@@ -46,6 +46,6 @@ public class RestaurantAPI {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RetrieveMenuResponse {
-        private List<Menu> menus;
+        private List<RestaurantMenu> menus;
     }
 }

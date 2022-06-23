@@ -1,6 +1,6 @@
 package com.vmw.sample.restaurantservice.primary
 
-import com.vmw.sample.restaurantservice.core.Menu
+import com.vmw.sample.restaurantservice.core.RestaurantMenu
 import com.vmw.sample.restaurantservice.core.RestaurantApplicationPort
 import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 
 @WebMvcTest(value = RestaurantAPI.class)
 class RestaurantAPISpec extends Specification {
@@ -33,14 +32,8 @@ class RestaurantAPISpec extends Specification {
     def "Given two restaurants with both a menu, when submitting a HTTP GET for retrieving the menu, we expect the whole menu returned"() {
         given:
             def menus = [
-                    new Menu(
-                    "Restaurant New York",
-                    ["italian-spaghetti", "pizza"]
-                    ),
-                    new Menu(
-                            "Restaurant Washington-DC",
-                            ["italian-macaroni"]
-                    ),
+                    new RestaurantMenu("Restaurant New York", ["italian-spaghetti", "pizza"]),
+                    new RestaurantMenu("Restaurant Washington-DC", ["italian-macaroni"]),
             ]
 
         when:

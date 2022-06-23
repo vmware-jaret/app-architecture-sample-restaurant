@@ -5,11 +5,11 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @EqualsAndHashCode
-public class Menu {
+public class RestaurantMenu {
     private final String restaurant;
     private final List<String> meals;
 
-    public Menu(final String restaurant, List<String> meals) {
+    public RestaurantMenu(final String restaurant, List<String> meals) {
         this.restaurant = restaurant;
         this.meals = meals;
     }

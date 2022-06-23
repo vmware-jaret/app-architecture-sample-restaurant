@@ -17,8 +17,8 @@ class RestaurantApplicationServiceSpec extends Specification {
             def result = subject.retrieveMenu()
         then:
             result == [
-                    new Menu("New York", ["pizza"]),
-                    new Menu("Washington DC", ["spaghetti"])
+                    new RestaurantMenu("New York", ["pizza"]),
+                    new RestaurantMenu("Washington DC", ["spaghetti"])
             ]
             1 * restaurantRepositoryPort.getAll() >> [restaurantOne, restaurantTwo]
     }
