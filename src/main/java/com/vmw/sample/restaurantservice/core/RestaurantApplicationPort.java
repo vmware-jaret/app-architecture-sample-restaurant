@@ -1,12 +1,17 @@
 package com.vmw.sample.restaurantservice.core;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
 
 public interface RestaurantApplicationPort {
 
     /**
-     * Register a new meal the restaurants could prepare
-     * @return new unique identifier over the set of meals known
+     * Register a new meal the restaurant could prepare
      */
-    CompletableFuture<String> registerMeal(String name);
+    void registerMeal(String restaurant, String name);
+
+    /**
+     * Returns the menu of every Restaurant
+     * @return
+     */
+    List<RestaurantMenu> retrieveMenu();
 }
