@@ -39,7 +39,20 @@ public class JpaRestaurantRepositoryAdapter implements RestaurantRepositoryPort 
 
     private RestaurantEntity convert(Restaurant restaurant) {
         RestaurantEntity entity = new RestaurantEntity();
-        // TODO: implement
+        RestaurantId id = new RestaurantId();
+        id.setName(restaurant.getName());
+
+        entity.setId(id);
+        entity.setMeals(restaurant.getMenu().stream().map((meal) -> this.convertMeal(id, meal)).collect(Collectors.toSet()));
         return entity;
+    }
+
+    private MealEntity convertMeal(RestaurantId restaurantId, String meal) {
+        MealEntity mealEntity = new MealEntity();
+        MealId mealId = new MealId();
+        mealId.setRestaurantId(restaurantId);
+        mealId.setName(meal);
+        mealEntity.setId(mealId);
+        return mealEntity;
     }
 }
