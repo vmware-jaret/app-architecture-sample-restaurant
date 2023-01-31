@@ -64,11 +64,14 @@ class JpaRestaurantRepositoryAdapterSpec extends Specification {
 
     def "Given an Restaurant, when we persist it, we expect that it is translated to the RestaurantEntity and persisted"() {
         given:
-            def restaurant = new Restaurant("New York,", ["pizza salami"])
+            def restaurant = new Restaurant("New York", ["pizza salami"])
         when:
             subject.persist(restaurant)
         then:
-            1 * repositoryMock.save(createRestaurantEntity("New York", ["pizza salami"]))
+            1 * repositoryMock.save({ (it as RestaurantEntity).id.name == "New York" &&
+                    (it as RestaurantEntity).meals.size() == 1 &&
+                    (it as RestaurantEntity).meals.first().id.name == "pizza salami"
+            })
     }
 
     RestaurantEntity createRestaurantEntity(String name, List<String> meals) {
