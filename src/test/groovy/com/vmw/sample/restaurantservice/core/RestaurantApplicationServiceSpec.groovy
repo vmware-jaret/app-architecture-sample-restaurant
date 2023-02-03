@@ -6,8 +6,10 @@ class RestaurantApplicationServiceSpec extends Specification {
 
     def restaurantRepositoryPort = Mock(RestaurantRepositoryPort)
 
+    def mealPreparementRepositoryPort = Mock(MealPreparementRepositoryPort)
+
     private RestaurantApplicationService subject =
-            new RestaurantApplicationService(restaurantRepositoryPort)
+            new RestaurantApplicationService(restaurantRepositoryPort, mealPreparementRepositoryPort)
 
     def "When retrieving the menu we expect the menu is extracted from all Restaurants available in the repository"() {
         given:
@@ -34,6 +36,17 @@ class RestaurantApplicationServiceSpec extends Specification {
             1 * restaurantRepositoryPort.persist(new Restaurant("Washington DC", ["italian-spaghetti"]))
     }
 
+    def "When retrieving the preparement overview we expect the overview is extracted from all Restaurants available in the repository"() {
+        given:
+            def mealPreparement = new MealPreparement("New York");
+            mealPreparement.register("pizza")
+            mealPreparement.register("spaghetti")
+        when:
+            def result = subject.retrievePreparementOverview("New York")
+        then:
+            result == ["pizza", "spaghetti"]
+            1 * mealPreparementRepositoryPort.getByRestaurant("New York") >> mealPreparement
+    }
     /*
     @TestConfiguration
     static class Config extends WebSecurityConfigurerAdapter {

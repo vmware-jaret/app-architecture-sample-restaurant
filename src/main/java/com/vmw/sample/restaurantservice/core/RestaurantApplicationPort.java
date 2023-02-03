@@ -14,4 +14,15 @@ public interface RestaurantApplicationPort {
      * @return
      */
     List<RestaurantMenu> retrieveMenu();
+
+    /**
+     * Returns the current meals to be prepared by given Restaurant
+     * @return
+     */
+    List<String> retrievePreparementOverview(String restaurant);
+
+    /**
+     * Set the meal status to prepared, e.g. driver could fulfill delivery
+     */
+    void mealPrepared(String restaurant, String name);
 }

@@ -1,8 +1,6 @@
 package com.vmw.sample.restaurantservice.primary
 
 import com.vmw.sample.restaurantservice.core.RestaurantApplicationPort
-import com.vmw.sample.restaurantservice.core.RestaurantMenu
-import org.apache.commons.io.IOUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
@@ -12,15 +10,13 @@ import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 import spock.mock.DetachedMockFactory
 
-import java.nio.charset.StandardCharsets
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@WebMvcTest(value = RestaurantAPI.class)
-class RestaurantAPISpec extends Specification {
+@WebMvcTest(value = RestaurantPreparementAPI.class)
+class RestaurantPreparementAPISpec extends Specification {
 
     @Autowired
     private MockMvc mvc;
@@ -28,42 +24,30 @@ class RestaurantAPISpec extends Specification {
     @Autowired
     private RestaurantApplicationPort restaurantApplicationPort
 
-    def "Given two restaurants with both a menu, when submitting a HTTP GET for retrieving the menu, we expect the whole menu returned"() {
+    def "When submitting a HTTP GET for retrieving the overview, we expect the overview for the given restaurant returned"() {
         given:
-            def menus = [
-                    new RestaurantMenu("Restaurant New York", ["italian-spaghetti", "pizza"]),
-                    new RestaurantMenu("Restaurant Washington-DC", ["italian-macaroni"]),
-            ]
-
+            def meals = ["italian-spaghetti", "italian-macaroni"]
         when:
-            def result = mvc.perform(get('/api/restaurant/v1/retrieve-menu'))
+            def result = mvc.perform(get('/api/restaurant/v1/preparement/New York'))
         then:
-            1 * restaurantApplicationPort.retrieveMenu() >> menus
+            1 * restaurantApplicationPort.retrievePreparementOverview("New York") >> meals
             result.andExpect(status().isOk())
-            result.andExpect(jsonPath("\$.menus.[0].restaurant").value("Restaurant New York"))
-            result.andExpect(jsonPath("\$.menus.[0].meals").value(["italian-spaghetti", "pizza"]))
-            result.andExpect(jsonPath("\$.menus.[1].restaurant").value("Restaurant Washington-DC"))
-            result.andExpect(jsonPath("\$.menus.[1].meals").value(["italian-macaroni"]))
+            result.andExpect(jsonPath("\$.meals").value(["italian-spaghetti", "italian-macaroni"]))
     }
 
-    def "Given a POST for registering a meal, we expect that it is stored and new identifier has been returned"() {
+    def "When submitting a HTTP POST that meal is prepared, we expect that it is delegated to the system"() {
         given:
             def body = """{
                 "restaurant": "Washington-DC",
                 "meal": "italian spaghetti"
             }"""
-            println(body)
         when:
-            def results = mvc.perform(post('/api/restaurant/v1/register-meal')
+            def results = mvc.perform(post('/api/restaurant/v1/meal-prepared')
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
         then:
-            1 * restaurantApplicationPort.registerMeal("Washington-DC", "italian spaghetti")
+            1 * restaurantApplicationPort.mealPrepared("Washington-DC", "italian spaghetti")
             results.andExpect(status().isOk())
-    }
-
-    String readFile(String fileName) throws IOException {
-        return IOUtils.toString(Objects.requireNonNull(this.getClass().getResourceAsStream(fileName)), StandardCharsets.UTF_8)
     }
 
     @TestConfiguration
