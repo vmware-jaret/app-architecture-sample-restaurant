@@ -6,6 +6,10 @@ metadata:
     apps.tanzu.vmware.com/workload-type: web
     app.kubernetes.io/part-of: app-architecture-sample
 spec:
+  build:
+    env:
+      - name: BP_JVM_VERSION
+        value: "17"
   params:
     - name: annotations
       value:
@@ -15,3 +19,9 @@ spec:
       url: https://github.com/vmware-jaret/app-architecture-sample-restaurant.git
       ref:
         branch: main
+  serviceClaims:
+    - name: postgres-db
+      ref:
+        apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+        kind: ResourceClaim
+        name: restaurant-database-claim
